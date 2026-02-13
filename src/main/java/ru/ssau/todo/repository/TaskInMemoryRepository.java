@@ -2,6 +2,9 @@ package ru.ssau.todo.repository;
 import org.springframework.stereotype.Repository;
 import ru.ssau.todo.entity.Task;
 import ru.ssau.todo.entity.TaskStatus;
+import ru.ssau.todo.exceptions.TaskNotFoundException;
+import ru.ssau.todo.service.TaskRepository;
+
 import java.time.LocalDateTime;
 import java.util.*;
     @Repository
@@ -44,18 +47,15 @@ import java.util.*;
             return results;
         }
         @Override
-        public void update(Task task)
+        public void update(Task task) throws TaskNotFoundException
         {
-            if( task == null  || task.getId() == null) throw new IllegalArgumentException("not null");
+            if( task == null ) throw new IllegalArgumentException("not null");
             Task taskcurrent=taskslist.get(task.getId());
             if( taskcurrent == null) {
                 throw new TaskNotFoundException(task.getId());
             }
-            else {
-                taskcurrent.setTitle((task.getTitle()));
-                taskcurrent.setStatus(task.getStatus());
-            }
-
+            taskcurrent.setTitle((task.getTitle()));
+            taskcurrent.setStatus(task.getStatus());
         }
         @Override
         public void deleteById( long id)
