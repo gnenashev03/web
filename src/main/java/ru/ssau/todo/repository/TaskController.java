@@ -2,6 +2,7 @@ package ru.ssau.todo.repository;
 
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.ssau.todo.entity.Task;
@@ -49,7 +50,8 @@ public class TaskController {
     public ResponseEntity<Task> create(@RequestBody Task task )
     {
         Task savedTask=repository.create(task);
-        return ResponseEntity.created(URI.create("/tasks/"+savedTask.getId()) ).body(savedTask);
+        //return ResponseEntity.created(URI.create("/tasks/"+savedTask.getId()) ).body(savedTask);
+        return ResponseEntity.status(HttpStatus.CREATED).header("Location","/tasks/"+savedTask.getId()).body(savedTask);
     }
     @PutMapping("/{id}")
     public ResponseEntity<Task> update(@PathVariable long id, @RequestBody Task task) throws TaskNotFoundException {
