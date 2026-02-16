@@ -1,4 +1,4 @@
-package ru.ssau.todo.service;
+package ru.ssau.todo.repository;
 import ru.ssau.todo.entity.Task;
 import ru.ssau.todo.exceptions.TaskNotFoundException;
 
