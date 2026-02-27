@@ -1,23 +1,37 @@
 package ru.ssau.todo.entity;
 
+import org.springframework.boot.persistence.autoconfigure.EntityScan;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
-
+@Entity
+@Table(name="task")
 public class Task {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String title;
-    private TaskStatus status;
-    private Long createdBy;
-    private LocalDateTime createdAt;
-    public Task(){
 
+    @Column(nullable = false)
+    private String title;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TaskStatus status;
+
+    @ManyToOne(fetch = FetchType.LAZY) // связь на создателя задачи
+    @JoinColumn(name = "created_by", nullable = false) // внешний ключ в таблице task
+    private User createdBy;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
+    public Task() {
     }
-    public Task (Long id,String title, TaskStatus status, Long createdBy, LocalDateTime createdAt)
-    {
-        this.id=id;
-        this.title=title;
-        this.status=status;
-        this.createdBy=createdBy;
-        this.createdAt=createdAt;
+
+    public Task(String title, TaskStatus status, User createdBy, LocalDateTime createdAt) {
+        this.title = title;
+        this.status = status;
+        this.createdBy = createdBy;
+        this.createdAt = createdAt;
     }
     public Long getId() {
         return id;
@@ -37,10 +51,10 @@ public class Task {
     public void setStatus(TaskStatus status) {
         this.status = status;
     }
-    public Long getCreatedBy() {
+    public User getCreatedBy() {
         return createdBy;
     }
-    public void setCreatedBy(Long createdBy) {
+    public void setCreatedBy(User createdBy) {
         this.createdBy = createdBy;
     }
     public LocalDateTime getCreatedAt() {
