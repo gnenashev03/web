@@ -1,6 +1,5 @@
 package ru.ssau.todo.entity;
 
-import org.springframework.boot.persistence.autoconfigure.EntityScan;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 @Entity

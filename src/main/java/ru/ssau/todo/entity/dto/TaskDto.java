@@ -25,8 +25,8 @@ public class TaskDto {
     public void setTitle(String title) { this.title = title; }
     public TaskStatus getStatus() { return status; }
     public void setStatus(TaskStatus status) { this.status = status; }
-    public Long getCreatedById() { return createdById; }
-    public void setCreatedById(Long createdById) { this.createdById = createdById; }
+    public Long getCreatedBy() { return createdById; }
+    public void setCreatedBy(Long createdById) { this.createdById = createdById; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }

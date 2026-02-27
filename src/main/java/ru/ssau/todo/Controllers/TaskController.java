@@ -32,23 +32,23 @@ public class TaskController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody Task task) {
+    public ResponseEntity<TaskDto> create(@RequestBody Task task) {
         try {
             TaskDto saved = service.create(task);
             return ResponseEntity.status(HttpStatus.CREATED)
                     .header("Location", "/tasks/" + saved.getId())
                     .body(saved);
         } catch (IllegalStateException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable long id, @RequestBody Task task) {
+    public ResponseEntity update(@PathVariable long id, @RequestBody Task task) {
         task.setId(id);
         try {
             TaskDto updated = service.update(task);
-            return ResponseEntity.ok(updated);
+            return ResponseEntity.ok(null);
         } catch (TaskNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Task not found");
         } catch (IllegalStateException e) {
@@ -57,7 +57,7 @@ public class TaskController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteTaskById(@PathVariable long id) {
+    public ResponseEntity deleteTaskById(@PathVariable long id) {
         try {
             service.deleteById(id);
             return ResponseEntity.noContent().build();

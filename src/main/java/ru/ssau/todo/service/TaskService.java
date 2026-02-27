@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TaskService implements TaskServiceInterface {
@@ -29,7 +30,22 @@ public class TaskService implements TaskServiceInterface {
             throw new IllegalStateException("User already has 10 active tasks");
         }
     }
-
+    private Task getTaskOrExcept(long id) throws TaskNotFoundException {
+        Optional<Task> optional = taskRepository.findById(id);
+        if (optional.isEmpty()) {
+            throw new TaskNotFoundException(id);
+        }
+        return optional.get();
+    }
+    private TaskDto toDto(Task task) {
+        TaskDto taskDto = new TaskDto();
+        taskDto.setId(task.getId());
+        taskDto.setTitle(task.getTitle());
+        taskDto.setStatus(TaskStatus.valueOf(String.valueOf(task.getStatus())));
+        taskDto.setCreatedBy(task.getCreatedBy().getId());
+        taskDto.setCreatedAt(task.getCreatedAt());
+        return taskDto;
+    }
     @Override
     public TaskDto create(Task task) {
         checkActiveLimit(task);
@@ -40,10 +56,8 @@ public class TaskService implements TaskServiceInterface {
 
     @Override
     public TaskDto update(Task task) throws TaskNotFoundException {
-        Task existing = taskRepository.findById(task.getId())
-                .orElseThrow(() -> new TaskNotFoundException(task.getId()));
+        Task existing = getTaskOrExcept(task.getId());
         checkActiveLimit(task);
-
         existing.setTitle(task.getTitle());
         existing.setStatus(task.getStatus());
         Task saved = taskRepository.save(existing);
@@ -52,19 +66,17 @@ public class TaskService implements TaskServiceInterface {
 
     @Override
     public void deleteById(long id) throws TaskNotFoundException {
-        Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new TaskNotFoundException(id));
+        Task task = getTaskOrExcept(id);
         long minutes = ChronoUnit.MINUTES.between(task.getCreatedAt(), LocalDateTime.now());
         if (minutes < MINUTES_TO_DELETE) {
-            throw new IllegalStateException("Cannot delete task younger than 5 minutes");
+            throw new IllegalStateException("Cannot delete created task less than 5 minutes");
         }
         taskRepository.deleteById(id);
     }
 
     @Override
     public TaskDto findById(long id) throws TaskNotFoundException {
-        Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new TaskNotFoundException(id));
+        Task task = getTaskOrExcept(id);
         return toDto(task);
     }
 
@@ -83,13 +95,4 @@ public class TaskService implements TaskServiceInterface {
         return taskRepository.countActiveTasksByUserId(userId);
     }
 
-    private TaskDto toDto(Task task) {
-        return new TaskDto(
-                task.getId(),
-                task.getTitle(),
-                task.getStatus(),
-                task.getCreatedBy().getId(),
-                task.getCreatedAt()
-        );
-    }
 }

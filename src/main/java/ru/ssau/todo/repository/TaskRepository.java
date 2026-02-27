@@ -14,14 +14,10 @@ import java.util.Optional;
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
     Optional<Task> findById(long id);
-    @Query("SELECT t FROM Task t WHERE t.createdBy.id = :userId AND t.createdAt BETWEEN :from AND :to")
-    List<Task> findAll(
-
-            @Param("from") LocalDateTime from,
-            @Param("to") LocalDateTime to,
-            @Param("userId") Long userId
-    );
-    @Query("SELECT COUNT(t) FROM Task t WHERE t.createdBy.id = :userId AND t.status IN ('OPEN', 'IN_PROGRESS')")
+    @Query(nativeQuery = true,
+            value = "SELECT t FROM Task t WHERE t.createdBy.id = :userId AND t.createdAt BETWEEN :from AND :to")
+    List<Task> findAll(LocalDateTime from, LocalDateTime to, long userId);
+    @Query(value ="SELECT COUNT(t) FROM Task t WHERE t.createdBy.id = :userId AND t.status IN ('OPEN', 'IN_PROGRESS')")
     long countActiveTasksByUserId(@Param("userId") Long userId);
 
 }
