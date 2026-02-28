@@ -73,8 +73,8 @@ public class TaskController {
             @RequestParam(required = false) LocalDateTime from,
             @RequestParam(required = false) LocalDateTime to,
             @RequestParam long userId) {
-        if (from == null) from = LocalDateTime.MIN;
-        if (to == null) to = LocalDateTime.MAX;
+        if (from == null) from = LocalDateTime.of(1970,1,1,0,0);
+        if (to == null) to = LocalDateTime.of(3001,1,1,0,0);
         List<TaskDto> tasks = service.findAll(from, to, userId);
         return ResponseEntity.ok(tasks);
     }
