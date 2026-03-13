@@ -12,4 +12,5 @@ public interface TaskServiceInterface {
     TaskDto update(Task task) throws TaskNotFoundException;
     void deleteById(long id) throws TaskNotFoundException;
     long countActiveTasksByUserId(long userId);
+    TaskDto createTask(TaskDto dto, String username);
 }

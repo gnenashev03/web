@@ -1,11 +1,14 @@
 package ru.ssau.todo.service;
 
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.ssau.todo.entity.Task;
 import ru.ssau.todo.entity.TaskStatus;
+import ru.ssau.todo.entity.User;
 import ru.ssau.todo.exceptions.TaskNotFoundException;
 import ru.ssau.todo.repository.TaskRepository;
 import ru.ssau.todo.entity.dto.TaskDto;
+import ru.ssau.todo.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -18,8 +21,11 @@ public class TaskService implements TaskServiceInterface {
     private final static int MAX_ACTIVE_TASKS = 10;
     private final static int MINUTES_TO_DELETE = 5;
     private final TaskRepository taskRepository;
-    public TaskService(TaskRepository taskRepository) {
+    private UserRepository userRepository;
+
+    public TaskService(TaskRepository taskRepository, UserRepository userRepository) {
         this.taskRepository = taskRepository;
+        this.userRepository = userRepository;
     }
     private boolean isActive(Task task) {
         return task.getStatus() == TaskStatus.OPEN || task.getStatus() == TaskStatus.IN_PROGRESS;
@@ -53,7 +59,16 @@ public class TaskService implements TaskServiceInterface {
         Task saved = taskRepository.save(task);
         return toDto(saved);
     }
-
+    @Override
+    public TaskDto createTask(TaskDto dto, String username) {
+        Task task = new Task();
+        task.setTitle(dto.getTitle());
+        task.setStatus(dto.getStatus());
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        task.setCreatedBy(user);
+        return create(task);
+    }
     @Override
     public TaskDto update(Task task) throws TaskNotFoundException {
         Task existing = getTaskOrExcept(task.getId());

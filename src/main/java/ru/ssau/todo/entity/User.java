@@ -2,6 +2,7 @@ package ru.ssau.todo.entity;
 import jakarta.persistence.*;
 import ru.ssau.todo.entity.TaskStatus;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -16,7 +17,8 @@ public class User {
 
     @Column(unique = true, nullable = false, length = 100)
     private String username;
-
+    @Column(unique = true, nullable = false, length =100)
+    private  String password;
     @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL)
     private List<Task> tasks;
 
@@ -26,7 +28,7 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
     public Long getId() {
         return id;}
@@ -56,4 +58,7 @@ public class User {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
+
+    public String getPassword() {return  password;}
+    public void setPassword(String password) {this.password=password;}
 }

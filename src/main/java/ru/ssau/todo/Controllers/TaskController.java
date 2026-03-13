@@ -2,6 +2,7 @@ package ru.ssau.todo.Controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.ssau.todo.entity.Task;
 import ru.ssau.todo.entity.dto.TaskDto;
@@ -31,7 +32,7 @@ public class TaskController {
         }
     }
 
-    @PostMapping
+    /*@PostMapping
     public ResponseEntity<TaskDto> create(@RequestBody Task task) {
         try {
             TaskDto saved = service.create(task);
@@ -41,8 +42,20 @@ public class TaskController {
         } catch (IllegalStateException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
+    }*/
+    @PostMapping
+    public ResponseEntity<TaskDto> createTask(@RequestBody TaskDto dto, Authentication authentication) {
+        try {
+            String username = authentication.getName();
+            TaskDto savedTask = service.createTask(dto, username);
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .header("Location", "/tasks/" + savedTask.getId())
+                    .body(savedTask);
+        }
+        catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+        }
     }
-
     @PutMapping("/{id}")
     public ResponseEntity update(@PathVariable long id, @RequestBody Task task) {
         task.setId(id);
