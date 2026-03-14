@@ -21,9 +21,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public CustomUserDetailsService(UserRepository userRepository,
-                                    RoleRepository roleRepository,
-                                    PasswordEncoder passwordEncoder) {
+    public CustomUserDetailsService(UserRepository userRepository,RoleRepository roleRepository,PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
@@ -49,7 +47,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = new User();
         user.setUsername(dto.getUsername());
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
-
         Role role;
         if ("admin".equalsIgnoreCase(user.getUsername())) {
             role = roleRepository.findByName("ROLE_ADMIN").orElseThrow(() ->

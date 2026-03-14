@@ -2,6 +2,7 @@ package ru.ssau.todo.Controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.ssau.todo.entity.Task;
@@ -70,6 +71,7 @@ public class TaskController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity deleteTaskById(@PathVariable long id) {
         try {
             service.deleteById(id);

@@ -17,7 +17,7 @@ public class User {
 
     @Column(unique = true, nullable = false, length = 100)
     private String username;
-    @Column(unique = true, nullable = false, length =100)
+    @Column(nullable = false, length =100)
     private  String password;
     @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL)
     private List<Task> tasks;
