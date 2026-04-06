@@ -1,0 +1,21 @@
+
+<div class="task-card" [style.border-left-color]="getStatusColor(task.status)">
+  <h3>{{ task.title }}</h3>
+  
+  <p>
+    <strong>Статус:</strong> 
+    <span [style.color]="getStatusColor(task.status)">
+      {{ getStatusLabel(task.status) }}  <!-- ← Русский текст -->
+    </span>
+  </p>
+  
+  <p>
+    <strong>Создана:</strong> 
+    {{ task.createdAt | date:'dd.MM.yyyy HH:mm' }}
+  </p>
+  
+  <div class="actions">
+    <a [routerLink]="['/tasks', task.id]" class="btn-edit">Редактировать</a>
+    <button (click)="onDelete()" class="btn-delete">Удалить</button>
+  </div>
+</div>

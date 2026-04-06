@@ -1,0 +1,58 @@
+<div class="edit-container">
+  <div class="edit-card" [style.border-left]="'4px solid #007bff'">
+    
+    <div class="edit-header">
+      <h2>{{ isNew ? 'Новая задача' : 'Редактирование задачи' }}</h2>
+    </div>
+    
+    @if (isLoading) {
+      <p class="loading">Загрузка...</p>
+    } @else {
+      <form (ngSubmit)="save()" class="task-form" #editForm="ngForm">
+        
+        <div class="form-group">
+          <label for="title">Название задачи</label>
+          <input
+            type="text"
+            id="title"
+            [(ngModel)]="task.title"
+            name="title"
+            required
+            minlength="3"
+            placeholder="Введите название..."
+            #title="ngModel"
+          />
+          @if (title.invalid && title.touched) {
+            <span class="error-text">Минимум 3 символа</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="status">Статус</label>
+          <select
+            id="status"
+            [(ngModel)]="task.status"
+            name="status"
+          >
+            @for (status of statuses; track status) {
+              <option [value]="status">{{ getStatusLabel(status) }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid || isLoading">
+            {{ isLoading ? 'Сохранение...' : 'Сохранить' }}
+          </button>
+          <button type="button" class="btn btn-secondary" (click)="cancel()" [disabled]="isLoading">
+            Отмена
+          </button>
+        </div>
+      </form>
+    }
+
+    @if (errorMessage) {
+      <p class="error-message">{{ errorMessage }}</p>
+    }
+  </div>
+</div>

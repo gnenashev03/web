@@ -1,0 +1,31 @@
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.username {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+.btn-logout {
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-logout:hover {
+  background: #c82333;
+}

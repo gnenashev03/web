@@ -1,8 +1,14 @@
+# ═══════════════════════════════════════════════════════════
+#  ОБЪЕДИНЁННЫЙ .GITIGNORE ДЛЯ MONOREPO (Angular + Spring)
+# ═══════════════════════════════════════════════════════════
+
+# ─── Backend: Spring Boot ──────────────────────────────────
 HELP.md
 target/
-.mvn/wrapper/maven-wrapper.jar
+!.gitignore
 !**/src/main/**/target/
 !**/src/test/**/target/
+.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###
 .apt_generated
@@ -14,7 +20,7 @@ target/
 .sts4-cache
 
 ### IntelliJ IDEA ###
-.idea
+.idea/
 *.iws
 *.iml
 *.ipr
@@ -29,5 +35,59 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### VS Code ###
-.vscode/
+# ─── Frontend: Angular ─────────────────────────────────────
+# Compiled output
+angular/web/dist/
+angular/web/tmp/
+angular/web/out-tsc/
+angular/web/bazel-out/
+
+# Node
+angular/web/node_modules/
+npm-debug.log
+yarn-error.log
+
+# IDEs and editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/mcp.json
+.history/*
+
+# Angular cache
+angular/web/.angular/cache/
+.sass-cache/
+/connect.lock
+/coverage
+/libpeerconnection.log
+testem.log
+/typings
+__screenshots__/
+
+# System files
+.DS_Store
+Thumbs.db
+
+
+frontend/angular.json
+frontend/package.json
+frontend/src/...
+
+
+# ─── Общие исключения ──────────────────────────────────────
+*.log
+.env
+*.swp
+*.swo
+*~

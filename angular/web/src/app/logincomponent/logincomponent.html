@@ -1,0 +1,52 @@
+<div class="login-container">
+  <div class="login-card" [style.border-left]="'4px solid ' + getStatusColor('OPEN')">
+    
+    <div class="login-header">
+      <h2> Вход в систему</h2>
+      <p class="subtitle">Введите учётные данные для доступа к задачам</p>
+    </div>
+    
+    <form (ngSubmit)="onLogin()" class="login-form" #loginForm="ngForm">
+      
+      <div class="form-group">
+        <label for="username">Логин</label>
+        <input
+          type="text"
+          id="username"
+          [(ngModel)]="username"
+          name="username"
+          required
+          placeholder="Введите логин"
+          #usernameInput="ngModel"
+        />
+        @if (usernameInput.invalid && usernameInput.touched) {
+          <span class="error-text">Обязательное поле</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="password">Пароль</label>
+        <input
+          type="password"
+          id="password"
+          [(ngModel)]="password"
+          name="password"
+          required
+          placeholder="Введите пароль"
+          #passwordInput="ngModel"
+        />
+        @if (passwordInput.invalid && passwordInput.touched) {
+          <span class="error-text">Обязательное поле</span>
+        }
+      </div>
+
+      <button type="submit" class="btn btn-primary" [disabled]="loginForm.invalid">
+        Войти
+      </button>
+    </form>
+
+    @if (errorMessage) {
+      <p class="error-message">{{ errorMessage }}</p>
+    }
+  </div>
+</div>

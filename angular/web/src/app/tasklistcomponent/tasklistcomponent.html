@@ -1,0 +1,19 @@
+<div class="task-list-container">
+  <div class="header">
+    <div class="header-left">
+      <h2>Задачи</h2>
+      <a routerLink="/tasks/new" class="btn-primary">+ Создать задачу</a>
+    </div>
+  
+    <app-user-info></app-user-info>
+  </div>
+
+  @for (task of tasks; track task?.id) {
+    <app-task-item 
+      [task]="task" 
+      (deleteTask)="onDeleteTask($event)">
+    </app-task-item>
+  } @empty {
+    <p class="empty">Нет задач</p>
+  }
+</div>
